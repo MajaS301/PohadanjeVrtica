@@ -6,11 +6,11 @@ namespace Backend.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class ProizvodjacController : ControllerBase
+    public class SkupinaController : ControllerBase
     {
-        private readonly TipoviAutaContext _context;
+        private readonly BackendContext _context;
 
-        public ProizvodjacController(TipoviAutaContext context)
+        public SkupinaController(BackendContext context)
         {
             _context = context;
         }
@@ -20,7 +20,7 @@ namespace Backend.Controllers
         {
             try
             {
-                return Ok(_context.Proizvodjaci);
+                return Ok(_context.Skupine);
 
             }
             catch (Exception e)
@@ -37,7 +37,7 @@ namespace Backend.Controllers
         {
             try
             {
-                var s = _context.Proizvodjaci.Find(sifra);
+                var s = _context.Skupine.Find(sifra);
                 if (s == null)
                 {
                     return NotFound();
@@ -51,11 +51,11 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(Proizvodjac proizvodjac)
+        public IActionResult Post(Skupina proizvodjac)
         {
             try
             {
-                _context.Proizvodjaci.Add(proizvodjac);
+                _context.Skupine.Add(proizvodjac);
                 _context.SaveChanges();
                 return StatusCode(StatusCodes.Status201Created, proizvodjac);
             }
@@ -70,22 +70,22 @@ namespace Backend.Controllers
         [Route("{sifra:int}")]
         [Produces("application/json")]
 
-        public IActionResult Put(int sifra, Proizvodjac proizvodjac)
+        public IActionResult Put(int sifra, Skupina skupina)
         {
             try
             {
 
-                var s = _context.Proizvodjaci.Find(sifra);
+                var s = _context.Skupine.Find(sifra);
 
                 if (s == null)
                 {
                     return NotFound();
                 }
 
-                s.Naziv = proizvodjac.Naziv;
-                s.Zemlja = proizvodjac.Zemlja;
+                s.Naziv = skupina.Naziv;
+                s.Prostorija = skupina.Prostorija;
 
-                _context.Proizvodjaci.Update(s);
+                _context.Skupine.Update(s);
                 _context.SaveChanges();
                 return Ok(new { poruka = "Uspješno promijenjen podatak!" });
             }
@@ -101,12 +101,12 @@ namespace Backend.Controllers
         {
             try
             {
-                var s = _context.Proizvodjaci.Find(sifra);
+                var s = _context.Skupine.Find(sifra);
                 if (s == null)
                 {
                     return NotFound();
                 }
-                _context.Proizvodjaci.Remove(s);
+                _context.Skupine.Remove(s);
                 _context.SaveChanges();
                 return Ok(new { poruka = "Uspješno obrisano!" });
             }

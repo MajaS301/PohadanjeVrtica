@@ -1,122 +1,84 @@
-﻿
+﻿use master
+go
+drop database if exists pohadjanje_Vrtica;
+go
+create database pohadjanje_Vrtica collate Croatian_CI_AS;
+go
+use pohadjanje_Vrtica;
+go
 
--- Zamjeniti db_a98acf_edunovawp5 s imenom svoje baze
-
-SELECT name, collation_name FROM sys.databases;
-GO
-ALTER DATABASE db_ab267a_tipoviauta SET SINGLE_USER WITH
-ROLLBACK IMMEDIATE;
-GO
-ALTER DATABASE db_ab267a_tipoviauta COLLATE Croatian_CI_AS;
-GO
-ALTER DATABASE db_ab267a_tipoviauta SET MULTI_USER;
-GO
-SELECT name, collation_name FROM sys.databases;
-GO
-
-
-
-
-
-
-
-create table proizvodjaci(
+create table skupine(
 sifra int not null primary key identity(1,1),
-naziv varchar(100) not null,
-zemlja varchar(100) not null
+naziv varchar(20) not null,
+prostorija varchar(20) not null
 );
 
-create table vrsteauta(
+create table tete(
 sifra int not null primary key identity(1,1),
-naziv varchar(100) not null
+ime varchar(50) not null,
+prezime varchar(50) not null,
+broj_mobitela varchar(20),
+oib char(11)
 );
 
-create table automobili(
+create table podskupine(
 sifra int not null primary key identity(1,1),
-nazivauta varchar(100) not null ,
-gorivo varchar(100) not null,
-model varchar(100) not null,
-godiste int,
-proizvodjaci int not null references proizvodjaci(sifra),
-vrsteauta int not null references vrsteauta(sifra)
+naziv varchar(50) not null,
+skupina int not null references skupine(sifra),
+teta int not null references tete(sifra)
 );
 
-insert into proizvodjaci(naziv, zemlja)
-values
+
+create table djeca(
+sifra int not null primary key identity(1,1),
+podskupina int not null references podskupine(sifra),
+ime varchar(20) not null,
+prezime varchar(20) not null,
+spol bit not null, --0 za muško 1 za žensko
+datum_rodjenja date,
+kontakt_roditelja varchar (20)
+);
+
 --1
-('Bmw', 'Njemačka'),
+insert into skupine (naziv, prostorija) values
+('Linići' , 'soba 906')
 --2
-('Mercedes', 'Njemačka'),
---3
-('Ferrari', 'Italija'),
---4
-('Alfa_romeo', 'Italija'),
---5
-('Cupra', 'Španjolska'),
---6
-('Seat', 'Španjolska'),
---7
-('Renault','Francuska'),
---8
-('Peugeot', 'Francuska');
+insert into skupine (naziv, prostorija) values
+('Lolići' , 'soba 129');
 
-insert into vrsteauta(naziv)
-values
 --1
-('limuzina'), 
+insert into tete (ime, prezime) values
+('Ana Marija' , 'Novak')
 --2
-('karavan'), 
+insert into tete (ime, prezime) values
+('Lara', 'Petrović')
 --3
-('monovolumen'), 
+insert into tete (ime, prezime) values
+('Ema', 'Vukić')
 --4
-('coupe'), 
---5
-('kabriolet'), 
---6
-('suv');
+insert into tete (ime, prezime) values
+('Sofija', 'Pavlović')
 
+insert into podskupine (naziv, skupina, teta) values
+--1
+('Medeki', 1, 1),
+--2
+('Zečići', 1, 3),
+--3
+('Anđelčići', 2,2),
+--4
+('Srčeka', 2,4)
 
-insert into automobili(nazivauta, gorivo, model, godiste, proizvodjaci, vrsteauta)
-values
-('Bmw', 'hibrid', 'serija1', '2015', 1, 3), 
-('Bmw', 'hibrid', 'serija2', '2015', 1, 3),
-('Bmw', 'hibrid', 'serija3', '2018', 1, 2),
-('Bmw', 'hibrid', 'serija4', '2018', 1, 1),
-('Bmw', 'hibrid', 'serija5', '2020', 1, 2),
-('Bmw', 'hibrid', 'serija6', '2020', 1, 4),
-('Bmw', 'hibrid', 'serija7', '2022', 1, 6),
-('Bmw', 'hibrid', 'serija8', '2022', 1, 5),
-('Mercedes', 'hibrid', 'Aklasa', '2017', 2, 3), 
-('Mercedes', 'hibrid', 'Bklasa', '2017', 2, 3),
-('Mercedes', 'hibrid', 'Cklasa', '2019', 2, 1),
-('Mercedes', 'hibrid', 'Eklasa', '2020', 2, 1),
-('Mercedes', 'hibrid', 'Sklasa', '2022', 2, 5), 
-('Ferrari', 'hibrid', 'F40', '2015', 3, 4),
-('Ferrari', 'hibrid', 'F50', '2017', 3, 5), 
-('Ferrari', 'hibrid', 'Dino', '2018', 3, 4),
-('Ferrari', 'hibrid', 'Enzo', '2020', 3, 6),
-('Alfa_romeo', 'hibrid', 'Giulia', '2018', 4, 6), 
-('Alfa_romeo', 'hibrid', 'Giulietta', '2020', 4, 3), 
-('Alfa_romeo', 'hibrid', 'Spider', '2024', 4, 6),
-('Alfa_romeo', 'hibrid', 'Stelvio', '2024', 4, 6),
-('Alfa_romeo', 'hibrid', 'GTV', '2023', 4, 5),
-('Cupra', 'hibrid', 'Alteca', '2020', 5, 3), 
-('Cupra', 'hibrid', 'Born', '2022', 5, 4),
-('Cupra', 'hibrid', 'Formentor', '2024', 5, 3), 
-('Cupra', 'hibrid', 'Leon', '2018', 5, 3),
-('Seat', 'hibrid', 'Ibiza', '2011', 6, 3), 
-('Seat', 'hibrid', 'Cordoba', '2016', 6, 1),
-('Seat', 'hibrid', 'Malaga', '2014', 6, 3), 
-('Seat', 'hibrid', 'Toledo', '2011', 6, 1),
-('Renault', 'hibrid', 'Megan', '2018', 7, 1), 
-('Renault', 'hibrid', 'Talisman', '2020', 7, 1),
-('Renault', 'hibrid', 'Capture', '2022', 7, 3),
-('Renault', 'hibrid', 'Fluence', '2022', 7, 3),
-('Peugeot', 'hibrid', '208', '2021', 8, 5),
-('Peugeot', 'hibrid', '308', '2019', 8, 3),
-('Peugeot', 'hibrid', '408', '2020', 8, 1), 
-('Peugeot', 'hibrid', '508', '2024', 8, 1),
-('Peugeot', 'hibrid', '2008', '2019', 8, 6), 
-('Peugeot', 'hibrid', '3008', '2018', 8, 6),
-('Peugeot', 'hibrid', '4008', '2019', 8, 6), 
-('Peugeot', 'hibrid', '5008', '2020', 8, 6);
+insert into djeca(podskupina, ime, prezime, spol) values
+(1,'Ivan', 'Horvat', 0),
+(1, 'Noa', 'Kaštelan', 0),
+(1, 'Sofija', 'Jurić', 1),
+(2, 'Ela', 'Vrančić', 1),
+(2, 'Luna', 'Stipanović', 1),
+(2, 'Marko', 'Marinković', 0),
+(3, 'Nika', 'Kovač', 1),
+(3, 'Mia', 'Šarić', 1),
+(3, 'Luka', 'Grgić', 0),
+(4, 'Vid', 'Bilić', 0),
+(4, 'Lea', 'Matić', 1),
+(4,'Noa', 'Kovačević', 0);

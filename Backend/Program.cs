@@ -10,8 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<TipoviAutaContext>(options => {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TipoviAutaContext"));
+builder.Services.AddDbContext<BackendContext>(options => {
+    options.UseSqlServer(builder.Configuration.GetConnectionString("EdunovaContext"));
 });
 
 builder.Services.AddCors(o => {

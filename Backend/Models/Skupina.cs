@@ -2,10 +2,12 @@
 
 namespace Backend.Models
 {
-    public class VrstaAuta : Entitet
+    public class Skupina : Entitet
     {
         public string Naziv { get; set; } = "";
 
-    }
+        public string Prostorija { get; set; } = "";
 
+
+    }
 }
