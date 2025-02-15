@@ -1,11 +1,15 @@
-﻿use master
-go
-drop database if exists pohadjanje_Vrtica;
-go
-create database pohadjanje_Vrtica collate Croatian_CI_AS;
-go
-use pohadjanje_Vrtica;
-go
+﻿SELECT name, collation_name FROM sys.databases;
+GO
+ALTER DATABASE db_ab2d43_pohadjanjevrtica SET SINGLE_USER WITH
+ROLLBACK IMMEDIATE;
+GO
+ALTER DATABASE db_ab2d43_pohadjanjevrtica COLLATE Croatian_CI_AS;
+GO
+ALTER DATABASE db_ab2d43_pohadjanjevrtica SET MULTI_USER;
+GO
+SELECT name, collation_name FROM sys.databases;
+GO
+
 
 create table skupine(
 sifra int not null primary key identity(1,1),
